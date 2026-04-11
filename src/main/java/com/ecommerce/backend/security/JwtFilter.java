@@ -10,7 +10,6 @@ import java.io.IOException;
 public class JwtFilter extends GenericFilter {
 
     @Override
-    @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
