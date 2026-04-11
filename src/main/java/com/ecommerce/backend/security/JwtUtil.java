@@ -22,4 +22,13 @@ public class JwtUtil {
                 .signWith(key) // signature
                 .compact();
     }
+
+    public static String extractEmail(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
+    }
 }
