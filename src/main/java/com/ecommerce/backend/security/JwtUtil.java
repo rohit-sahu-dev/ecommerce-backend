@@ -33,4 +33,13 @@ public class JwtUtil {
                 .build()
                 .parseClaimsJws(token);
     }
+
+    public String extractEmail(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
+    }
 }
