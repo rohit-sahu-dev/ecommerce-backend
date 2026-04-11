@@ -21,4 +21,9 @@ public class UserController {
     public String login(@RequestBody User user) {
         return userService.login(user.getEmail(), user.getPassword());
     }
+
+    @GetMapping("/test")
+    public String test() {
+        return "API is working";
+    }
 }

@@ -2,33 +2,35 @@ package com.ecommerce.backend.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
 
+@Component
 public class JwtUtil {
 
-    // Secret key (must be long enough)
-    private static final String SECRET = "mysecretkeymysecretkeymysecretkey";
+    private final String SECRET = "mysecretkeymysecretkeymysecretkey"; // min 32 chars
 
-    private static final Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
+    private Key getKey() {
+        return Keys.hmacShaKeyFor(SECRET.getBytes());
+    }
 
     // Generate Token
-    public static String generateToken(String email) {
+    public String generateToken(String email) {
         return Jwts.builder()
-                .setSubject(email) // payload
+                .setSubject(email)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 hour
-                .signWith(key) // signature
+                .signWith(getKey())
                 .compact();
     }
 
-    public static String extractEmail(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
+    // Validate Token
+    public void validateToken(String token) {
+        Jwts.parserBuilder()
+                .setSigningKey(getKey())
                 .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+                .parseClaimsJws(token);
     }
 }

@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -28,16 +31,13 @@ public class UserService {
     }
     public String login(String email, String password) {
 
-        // 1. Find user
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // 2. Check password
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException("Invalid password");
         }
 
-        // 3. Generate JWT
-        return JwtUtil.generateToken(email);
+        return jwtUtil.generateToken(email);
     }
 }
