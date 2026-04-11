@@ -39,8 +39,16 @@ public class JwtFilter extends GenericFilter {
 
                 System.out.println("Authenticated User: " + email);
             } catch (Exception e) {
-                System.out.println("Invalid JWT Token");
+                ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("Invalid JWT Token");
+                return;
             }
+        }
+
+        if (header == null || !header.startsWith("Bearer ")) {
+            ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Missing Authorization Header");
+            return;
         }
 
         chain.doFilter(request, response);
